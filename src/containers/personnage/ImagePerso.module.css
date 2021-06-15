@@ -1,0 +1,16 @@
+.fleche {
+    background-color: #ff8000;
+    cursor: pointer;
+}
+
+.droite {
+    width: 20px;
+    height: 32px;
+    clip-path: polygon(100% 50%, 0 10%, 0 90%);
+}
+
+.gauche {
+    width: 20px;
+    height: 32px;
+    clip-path: polygon(0 50%, 100% 90%, 100% 10%);
+}
