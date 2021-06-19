@@ -13,9 +13,9 @@ const ImagePerso = (props) =>{
     else if(props.numImage === 3) imageToPrint=ImagePerso3;
     return (
         <div className="row no-guetters text-center align-items-center">
-            <div className={classgauche}></div>
+            <div className={classgauche} onClick={props.flecheGauche}></div>
             <div className="col"><img src={imageToPrint} alt="imagePerso" /></div>
-            <div className={["col-2 ms-2",ClassesPerso.fleche,ClassesPerso.droite].join(' ')}></div>
+            <div className={["col-2 ms-2",ClassesPerso.fleche,ClassesPerso.droite].join(' ')} onClick={props.flecheDroite}></div>
             
         </div>
     )
