@@ -3,6 +3,7 @@ import Titre from '../../components/titres/Titre';
 import Personnage from '../personnage/Personnage';
 import Arme from '../arme/Arme';
 import Bouton from '../../components/Bouton';
+import axios from 'axios';
 
 class CreateurPersonnage extends Component {
     state = {
@@ -13,8 +14,9 @@ class CreateurPersonnage extends Component {
             intelligence:0,
             arme:null
         },
-        armes:["epee","fleau", "arc", "hache"],
-        nbPointsDisponibles: 7
+        armes:null,
+        nbPointsDisponibles: 7,
+        loading:false
     }
     
     handleImagePrecedante = ()=>{
@@ -87,6 +89,24 @@ class CreateurPersonnage extends Component {
         alert("Création de personnage")
     }
 
+    componentDidMount = () => {
+        this.setState({loading:true})
+        axios.get("https://reactpersonnage-default-rtdb.europe-west1.firebasedatabase.app/armes.json")
+            .then(reponse => {
+                const armesArray = Object.values(reponse.data);
+                this.setState({
+                    armes:armesArray,
+                    loading:false
+                });
+            })
+            .catch(error => {
+                this.state({
+                    loading:false
+                })
+                console.log(error)
+            })
+    }
+
     render() {
         return (
             <div className="container">
@@ -104,11 +124,14 @@ class CreateurPersonnage extends Component {
                     />
                 </div>
                 <div>
-                    <Arme 
-                        listeArmes = {this.state.armes}
-                        changeArme = {this.handleChangeArmePersonnage}
-                        currentArme = {this.state.personnage.arme}
-                    />
+                    {this.state.loading && <div>Chargement...</div>}
+                    {this.state.armes &&
+                        <Arme 
+                            listeArmes = {this.state.armes}
+                            changeArme = {this.handleChangeArmePersonnage}
+                            currentArme = {this.state.personnage.arme}
+                        />
+                    }
                 </div>
                 <div className="row no-guetters">
                     <Bouton typeBtn='btn-lg btn-primary col-6' click={this.handleReset}>Réinitialiser</Bouton>
