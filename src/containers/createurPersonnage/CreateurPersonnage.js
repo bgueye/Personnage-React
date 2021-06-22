@@ -12,11 +12,12 @@ class CreateurPersonnage extends Component {
             force:0,
             agilite:0,
             intelligence:0,
-            arme:null
+            arme:""
         },
         armes:null,
         nbPointsDisponibles: 7,
-        loading:false
+        loading:false,
+        nom: null
     }
     
     handleImagePrecedante = ()=>{
@@ -81,12 +82,28 @@ class CreateurPersonnage extends Component {
                 arme:null
             },
             armes:["epee","fleau", "arc", "hache"],
-            nbPointsDisponibles: 7            
+            nbPointsDisponibles: 7,
+            nom: ""          
         })
     }
 
     handleCreation = ()=>{
-        alert("Création de personnage")
+        this.setState({loading:true});
+        const player = {
+            perso: {...this.state.personnage},
+            nom: this.state.nom
+        }
+        axios.post("https://reactpersonnage-default-rtdb.europe-west1.firebasedatabase.app/persos.json", player)
+            .then(reponse =>{
+                console.log(reponse);
+                this.setState({loading:false});
+                this.handleReset()
+            } )
+            .catch(error =>{
+                console.log(error);
+                this.setState({loading:false});
+                this.handleReset()
+            })
     }
 
     componentDidMount = () => {
@@ -100,7 +117,7 @@ class CreateurPersonnage extends Component {
                 });
             })
             .catch(error => {
-                this.state({
+                this.setState({
                     loading:false
                 })
                 console.log(error)
@@ -112,6 +129,11 @@ class CreateurPersonnage extends Component {
             <div className="container">
                 <div>
                     <Titre>Créateur de personnage</Titre>
+                    {this.state.loading && <div>Chargement...</div>}
+                    <div className="form-group">
+                        <label htmlFor="inputName">Nom: </label>
+                        <input type="text" className="form-control" id="inputName" value={this.state.nom} onChange={event => this.setState({nom:event.target.value})} />
+                    </div>
                 </div>
                 <div>
                     <Personnage 
@@ -124,7 +146,6 @@ class CreateurPersonnage extends Component {
                     />
                 </div>
                 <div>
-                    {this.state.loading && <div>Chargement...</div>}
                     {this.state.armes &&
                         <Arme 
                             listeArmes = {this.state.armes}
