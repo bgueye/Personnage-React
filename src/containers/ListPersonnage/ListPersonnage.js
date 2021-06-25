@@ -10,7 +10,7 @@ class ListPersonnage extends Component {
     }
 
 
-    componentDidMount = () => {
+    loadData = () => {
         this.setState({loading:true})
         axios.get("https://reactpersonnage-default-rtdb.europe-west1.firebasedatabase.app/persos.json")
             .then(res => {
@@ -22,6 +22,17 @@ class ListPersonnage extends Component {
                 console.log(err)
             })
     }
+
+    componentDidMount = () => {
+        this.loadData()
+    }
+    
+    componentDidUpdate = (oldProps, oldState) =>{
+        if (oldProps.refresh !== this.props.refresh){
+            this.loadData()
+        }
+    }
+
 
 
     render() {

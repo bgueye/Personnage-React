@@ -83,7 +83,7 @@ class CreateurPersonnage extends Component {
             },
             armes:["epee","fleau", "arc", "hache"],
             nbPointsDisponibles: 7,
-            nom: ""          
+            nom: null          
         })
     }
 
@@ -97,7 +97,8 @@ class CreateurPersonnage extends Component {
             .then(reponse =>{
                 console.log(reponse);
                 this.setState({loading:false});
-                this.handleReset()
+                this.handleReset();
+                this.props.refresh();
             } )
             .catch(error =>{
                 console.log(error);
